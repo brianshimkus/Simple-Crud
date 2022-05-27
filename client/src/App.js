@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 
 function App() {
@@ -7,6 +7,8 @@ function App() {
 	const [country, setCountry] = useState('')
 	const [position, setPosition] = useState('')
 	const [wage, setWage] = useState(0)
+
+	const [employeeList, setEmployeeList] = useState([])
 
 	const addEmployee = () => {
 		axios
@@ -21,6 +23,12 @@ function App() {
 				console.log('Success')
 			})
 	}
+
+	useEffect(() => {
+		axios.get('http://localhost:3001/employees').then((res) => {
+			setEmployeeList(res.data)
+		})
+	}, [])
 
 	return (
 		<div className='App bg-slate-800 min-h-screen'>
@@ -69,6 +77,30 @@ function App() {
 							Add Employee
 						</button>
 					</form>
+				</div>
+				<hr className='w-1/4 mx-auto my-12' />
+				<div className='w-full max-w-xs mx-auto container'>
+					{employeeList.map((val, key) => {
+						return (
+							<div className='bg-slate-300 mb-8 p-4 rounded-md' key={val.id}>
+								<p className='py-1'>
+									<strong>Name:</strong> {val.name}
+								</p>
+								<p className='py-1'>
+									<strong>Age:</strong> {val.age}
+								</p>
+								<p className='py-1'>
+									<strong>Country:</strong> {val.country}
+								</p>
+								<p className='py-1'>
+									<strong>Position:</strong> {val.position}
+								</p>
+								<p className='py-1'>
+									<strong>Wage:</strong> {val.wage}
+								</p>
+							</div>
+						)
+					})}
 				</div>
 			</div>
 		</div>
