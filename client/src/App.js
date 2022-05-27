@@ -24,6 +24,17 @@ function App() {
 			})
 	}
 
+	const deleteEmployee = (id) => {
+		alert('Are you sure you want to delete user?')
+		axios.delete(`http://localhost:3001/delete/${id}`).then((res) => {
+			setEmployeeList(
+				employeeList.filter((val) => {
+					return val.id !== id
+				})
+			)
+		})
+	}
+
 	useEffect(() => {
 		axios.get('http://localhost:3001/employees').then((res) => {
 			setEmployeeList(res.data)
@@ -71,7 +82,7 @@ function App() {
 							onChange={(e) => setWage(e.target.value)}
 						/>
 						<button
-							className='bg-slate-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full transition ease-in-out duration-300'
+							className='bg-slate-600 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full transition ease-in-out duration-300'
 							type='button'
 							onClick={addEmployee}>
 							Add Employee
@@ -98,6 +109,13 @@ function App() {
 								<p className='py-1'>
 									<strong>Wage:</strong> {val.wage}
 								</p>
+								<button
+									className='bg-slate-600 hover:bg-red-600 text-white  w-full text-center rounded-md px-4 py-2 transition ease-in-out duration-300 mt-4'
+									onClick={() => {
+										deleteEmployee(val.id)
+									}}>
+									Delete
+								</button>
 							</div>
 						)
 					})}
