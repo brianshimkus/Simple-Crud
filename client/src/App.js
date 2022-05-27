@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import axios from 'axios'
 
 function App() {
 	const [name, setName] = useState('')
@@ -7,12 +8,18 @@ function App() {
 	const [position, setPosition] = useState('')
 	const [wage, setWage] = useState(0)
 
-	const displayInfo = () => {
-		console.log(`Name: ${name}`)
-		console.log(`Age: ${age}`)
-		console.log(`Country: ${country}`)
-		console.log(`Position: ${position}`)
-		console.log(`Wage: ${wage}`)
+	const addEmployee = () => {
+		axios
+			.post('http://localhost:3001/create', {
+				name: name,
+				age: age,
+				country: country,
+				position: position,
+				wage: wage,
+			})
+			.then(() => {
+				console.log('Success')
+			})
 	}
 
 	return (
@@ -58,7 +65,7 @@ function App() {
 						<button
 							className='bg-slate-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full transition ease-in-out duration-300'
 							type='button'
-							onClick={displayInfo}>
+							onClick={addEmployee}>
 							Add Employee
 						</button>
 					</form>
