@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
 	const [name, setName] = useState('')
@@ -9,6 +11,9 @@ function App() {
 	const [wage, setWage] = useState(0)
 
 	const [employeeList, setEmployeeList] = useState([])
+
+	const notifyAdd = () => toast.success(`${name} added!`)
+	const notifyDelete = () => toast.error('User deleted!')
 
 	const addEmployee = () => {
 		axios
@@ -20,18 +25,22 @@ function App() {
 				wage: wage,
 			})
 			.then(() => {
-				console.log('Success')
+				setEmployeeList([
+					...employeeList,
+					{ name, age, country, position, wage },
+				])
+				notifyAdd()
 			})
 	}
 
 	const deleteEmployee = (id) => {
-		alert('Are you sure you want to delete user?')
 		axios.delete(`http://localhost:3001/delete/${id}`).then((res) => {
 			setEmployeeList(
 				employeeList.filter((val) => {
 					return val.id !== id
 				})
 			)
+			notifyDelete()
 		})
 	}
 
@@ -121,6 +130,7 @@ function App() {
 					})}
 				</div>
 			</div>
+			<ToastContainer autoClose={1500} />
 		</div>
 	)
 }
